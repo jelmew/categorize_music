@@ -5,24 +5,21 @@ import os
 from os.path import join, getsize
 
 def listDirs(dir):
-    complete_mp3_list=[]
     for root, subFolders,files in os.walk(dir,topdown=False):
         list_of_files=[os.path.join(root,f) for f in files]
         mp3_list=[f for f in list_of_files if ".mp3" in f]
-        if mp3_list:complete_mp3_list=complete_mp3_list+mp3_list
-    return complete_mp3_list
-
+        yield mp3_list
 def main():
     #MainRunroutine
     return
 
 #if __name__=="__main__":
 def load_all_mp3_files(input_dir):
-    mp3_list=listDirs(input_dir)
-    for mp3_file in mp3_list:
-        eyed3_file=eyed3.load(mp3_file)
-        if eyed3_file.tag==None: continue
-        yield eyed3_file
+    for mp3_list in listDirs(input_dir):
+            for mp3_file in mp3_list:
+                eyed3_file=eyed3.load(mp3_file)
+                if eyed3_file.tag==None: continue
+                yield eyed3_file
 
 
 if __name__=="__main__":
